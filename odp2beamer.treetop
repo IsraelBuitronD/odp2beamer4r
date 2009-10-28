@@ -1,0 +1,72 @@
+#! /usr/bin/env tt
+
+grammar Odp2Beamer
+
+  rule odpfile
+    optional_spaces xmltype optional_spaces tag optional_spaces <OdpFile>
+    /
+    optional_spaces tag optional_spaces <OdpFile>
+  end
+
+  rule xmltype
+    '<?xml' spaces attributes '?>'
+  end
+ 
+  rule tag
+    tag_open content tag_close <Tag>
+    /
+    tag_open_close <TagTagOpenClose>
+  end
+
+  rule content
+    optional_spaces tag content <ContentTagContent>
+    /
+    optional_spaces tag optional_spaces <ContentTag>
+    / 
+    [\w\s]* <ContentRegExp>
+  end
+  
+  rule tag_open_close
+    '<' tagname spaces attributes optional_spaces '/>' <TagOpenCloseWithAttribs>
+    /
+    '<' tagname optional_spaces '/>' <TagOpenCloseWithoutAttribs>
+  end
+  
+  rule tag_open
+    '<' tagname spaces attributes optional_spaces '>' <TagOpen>
+    /
+    '<' tagname '>' <TagOpen>
+  end
+
+  rule tag_close
+    '</' tagname '>' <TagClose>
+  end
+  
+  rule tagname
+    [a-z]+ [a-z0-9:_-]*
+  end
+    
+  rule attributes
+    attribute spaces attributes <MoreThanOneAttribute>
+    /
+    attribute 
+    #attribute <OneAttribute>
+  end
+
+  rule attribute
+    tagname '="' attribute_value '"' <Attribute>
+  end
+
+  rule attribute_value
+    [\w\s\.\*\+(),:/&%\#●–-]* <AttributeValue>
+  end
+  
+  rule optional_spaces
+    [\s]*
+  end
+  
+  rule spaces
+    [\s]+
+  end
+  
+end
