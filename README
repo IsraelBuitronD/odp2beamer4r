@@ -10,6 +10,7 @@ TODO list:
 - Support unzip an ODP file to temporal place while work with its content.
 - Support MathML formulas parsing and conversion to Latex ones.
 - Create a task to generate RB files (Treetop::Runtime) from Treetop (Grammar definitions) ones.
+- Support non ascii characters.
 
 Contact:
 

@@ -51,6 +51,9 @@ module Odp2Beamer
   module TagOpen
     def value(env = {})
       case tagname.text_value
+      when 'office:document-content':
+          "\n\\documentclass{beamer}" <<
+          "\n\\usepackage{graphicx}"
       when 'office:presentation':
           "\n\\begin{document}"
       when 'draw:page':
