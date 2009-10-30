@@ -1,0 +1,277 @@
+#! /usr/bin/env tt
+
+grammar MathML
+  #
+  # leaf tokens and data content of leaf elements
+  #
+  # [68] i_mdatai ::=       (#PCDATA | Presentation_tags)*
+  # [69] i_mdatan ::=       (#PCDATA | sep | Presentation_tags)*
+  # [70] ci         ::=    i_sg(ci) i_mdatai i_eg(ci)
+  # [71] cn         ::=    i_sg(cn) i_mdatan i_eg(cn)
+  # [72] csymbol ::=       i_sg(csymbol) i_mdatai i_eg(csymbol)
+
+  #
+  # separator
+  #
+  # [67] sep ::= i_ey(sep)
+
+  #
+  #  operator groups
+  #
+  # [59] i_unaryop    ::= i_funcop1ary | i_arithop1ary | i_trigop | i_classop | i_calcop | i_vcalcop | i_logicop1ary | i_lalgop1ary | i_setop1ary
+  # [60] i_binaryop   ::= i_arithop2ary | i_setop2ary | i_logicop2ary | i_lalgop2ary
+  # [61] i_naryop     ::= i_arithopnary | i_statopnary | i_logicopnary | i_lalgopnary | i_setopnary | i_funcopnary
+  # [62] i_specialop  ::= i_special | ci | csymbol
+  # [63] i_ispop      ::= int | sum | product
+  # [64] i_diffop     ::= diff | partialdiff
+  # [65] i_binaryrel  ::= i_genrel2ary | i_setrel2ary | i_seqrel2ary
+  # [66] i_naryrel    ::= i_genrelnary | i_setrelnary
+
+  #
+  #  set theoretic operators
+  #
+  # [55]   i_setop      ::=   i_setop1ary |i_setop2ary | i_setopnary
+  # [56]   i_setop1ary  ::=   card
+  # [57]   i_setop2ary  ::=   setdiff
+  # [58]   i_setopnary  ::=   union | intersect | cartesianproduct
+
+  #
+  #  logical operators
+  #
+  # [50]  i_logicop      ::= i_logicop1ary | i_logicopnary | i_logicop2ary | i_logicopquant
+  # [51]  i_logicop1ary  ::= not
+  # [52]  i_logicop2ary  ::= implies | equivalent | approx | factorof
+  # [53]  i_logicopnary  ::= and | or | xor
+  # [54]  i_logicopquant ::= forall | exists
+
+  #
+  #  linear algebra operators
+  #
+  # [46]  i_lalgop       ::=   i_lalgop1ary |i_lalgop2ary | i_lalgopnary
+  # [47]  i_lalgop1ary   ::=   determinant | transpose
+  # [48]  i_lalgop2ary   ::=   vectorproduct | scalarproduct | outerproduct
+  # [49]  i_lalgopnary   ::=   selector
+
+  #
+  #  statistics operators
+  #
+  # [44] i_statop         ::= i_statopnary | moment
+  # [45] i_statopnary ::=     mean | sdev | variance | median | mode
+
+  #
+  #  elementary classical functions and trigonometry
+  #
+  # [42] i_classop ::=      exp | ln | log
+  # [43] i_trigop ::=       sin | cos | tan | sec | csc | cot | sinh | cosh | tanh | sech | csch | coth | arcsin | arccos | arctan
+
+  #
+  #  sequences and series
+  #
+  # [41] i_seqop ::=      sum | product | limit
+  #  calculus and vector calculus
+  # [39] i_calcop ::=        int | diff | partialdiff
+  # [40] i_vcalcop ::=       divergence | grad | curl | laplacian
+
+  #
+  #  arithmetic operators
+  #
+  # [35]  i_arithop      ::= i_arithop1ary | i_arithop2ary | i_arithopnary | root
+  # [36]  i_arithop1ary  ::= abs | conjugate | factorial | minus | arg | real | imaginary | ﬂoor | ceiling
+  # [37]  i_arithop2ary  ::= quotient | divide | minus | power | rem
+  # [38]  i_arithopnary  ::= plus | times | max | min | gcd | lcm
+
+  #
+  # Functional operators
+  #
+  # [32] _funcop        ::= _funcop1ary | _funcopnary
+#   rule i_funcop
+#     i_funcop1ary / i_funcopnary
+#   end
+
+  # [33] _funcop1ary ::=    inverse | ident | domain | codomain | image
+  rule i_funcop1ary
+    inverse / ident / domain / codomain / image
+  end
+
+  # [34] _funcopnary ::=    fn| compose
+  rule i_funcopnary
+    fn / compose
+  end
+
+  # 
+  # Operators
+  # 
+
+  # [31] _operator ::= _funcop | _arithop | _calcop | _vcalcop | _seqop | _trigop | _classop | _statop | _lalgop | _logicop | _setop
+  rule i_operator
+    i_funcop / i_arithop / i_calcop / i_vcalcop / i_seqop / i_trigop / i_classop / i_statop / i_lalgop / i_logicop / i_setop
+  end
+
+  #
+  # Relations
+  #
+
+#   # [23]  _relation   ::= _genrel | _setrel | _seqrel2ary
+#   rule i_relation
+#     i_genrel / i_setrel / i_seqrel2ary
+#   end
+
+#   # [24]  _genrel     ::= _genrel2ary | _genrelnary
+#   rule i_genrel
+#     i_genrel2ary / i_genrelnary
+#   end
+
+  # [25]  _genrel2ary ::= ne
+  rule i_genrel2ary
+    ne
+  end
+
+  # [26]  _genrelnary ::= eq | leq | lt | geq | gt
+  rule i_genrelnary
+    eq / leq / lt / geq / gt
+  end
+  
+#   # [27]  _setrel     ::= _seqrel2ary | _setrelnary
+#   rule i_setrel
+#     i_seqrel2ary / i_setrelnary
+#   end
+
+  # [28]  _setrel2ary ::= in | notin | notsubset | notprsubset
+  rule i_setrel2ary
+    in / notin / notsubset / notprsubset
+  end
+  
+  # [29]  _setrelnary ::= subset | prsubset
+  rule i_setrelnary
+    subset / prsubset
+  end
+
+  # [30]  _seqrel2ary ::= tendsto
+  rule i_seqrel2ary
+    tendsto
+  end
+
+  #
+  # Mathml content constructs
+  #
+
+  # [22] _constantsym ::= integers | rationals | reals | naturalnumbers | complexes | primes | exponentiale | imaginaryi | notanumber | true | false | pi | eulergamma | infinity
+  rule i_constantsym
+    integers / rationals / reals / naturalnumbers / complexes / primes / exponentiale / imaginaryi / notanumber / true / false / pi / eulergamma / infinity
+  end
+
+  # [21] _qualifier   ::= lowlimit | uplimit | degree | logbase | domainofapplication | momentabout | condition
+  rule i_qualifier
+    lowlimit / uplimit / degree / logbase / domainofapplication / momentabout / condition
+  end
+
+  # [20] _constructor ::= interval | list | matrix | matrixrow | set | vector | piecewise | piece | otherwise
+  rule i_constructor
+    interval / list / matrix / matrixrow / set / vector / piecewise / piece / otherwise
+  end
+
+  # [19] _special     ::= apply | lambda | reln | fn | semantics
+  rule i_special
+    apply / lambda / reln / fn / semantics
+  end
+
+  # [18] _token ::= ci | cn | csymbol | _constantsym
+  rule i_token
+    ci / cn / csymbol / i_constantsym
+  end
+
+  # [17] _container ::= _special | _constructor
+  rule i_constructor
+    i_special / i_constructor
+  end
+
+  # [16] _mmlarg ::= _container | _token | _operator | _relation
+  rule i_mmlarg
+    i_container / i_token / i_operator / i_relation
+  end
+
+  #
+  # Start and end tag functions
+  #
+
+  # MathML Rule 10
+  # Empty tag preceded and followed by optional whitespace
+  rule i_ey
+    s i_empty s
+  end
+
+  # MathML Rule 9
+  # End tag followed by optional whitespace
+  rule i_eg
+    i_end s
+  end
+
+  # MathML Rule 8
+  # Start tag preceded by optional whitespace
+  rule i_sg
+    s i_start
+  end
+
+  # MathML Rule 7
+  # Valid empty tag for the element 'presentation'
+  rule i_empty
+    '<' presentation (char [^>])* '/>'
+  end
+
+  # MathML Rule 6
+  # Valid end tag for the element 'presentation'
+  rule i_end
+    '</' presentation opt_space '>'
+  end
+
+  # MathML Rule 5
+  # Valid start tag for the element 'presentation'
+  rule i_start
+    '<' presentation (char [^>])* '>'
+  end
+
+  #
+  # Characters, only for content validation characters
+  #
+
+  # MathML Rule 4
+  # Valid XML chars
+  # #x9 | #xA | #xD | [#x20-#xD7FF] | 
+  # [#xE000-#xFFFD] | [#x10000-#x10FFFF]
+  rule char
+    [#x9]
+    /
+    [#xA]
+    /
+    [#xD]
+    /
+    [\x20-\xD7FF]
+    /
+    [\xE000-\xFFFD]
+#    /
+#    [\x10000-\x10FFFF]
+  end
+
+  #
+  # Whitespace deﬁnitions including Presentation_tags
+  #
+  
+  # MathML Rule 3
+  # treat presentation as space
+  rule s
+    [space|presentation]*
+  end
+
+  # MathML Rule 2
+  # tab, lf, cr, space characters
+  rule space
+    [\r\n\t ]
+  end
+
+  # MathML Rule 1
+  rule presentation
+    [a-z]+ [a-z0-9:_-]*
+  end
+
+end
+
