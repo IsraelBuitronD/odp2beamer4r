@@ -20,8 +20,6 @@ ToDo List and Pendings
 Here is a list of pending features and some detected-reported errors.
 
 - Support 'itemize' and 'enumerate' environments by checking styles.
-- Support unzip an ODP file to temporal place while work with its
-  content.
 - Support MathML formulas parsing and conversion to Latex ones.
 - Create a task to generate ruby files (Treetop::Runtime classes) from
   Treetop (Grammar definitions) ones.
